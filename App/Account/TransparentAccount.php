@@ -11,28 +11,37 @@ class TransparentAccount{
 		  	->setLastName($data["sobrenome"])
 			->setEmail($data["email"])			
 			->setBirthDate($data["data_nascimento"])
-			->setTaxDocument($usuario["cpf"])
+			->setTaxDocument($data["cpf"])
 			->setType('MERCHANT')
 			->setTransparentAccount(true)
-			->setPhone($data["DDD"], $data["numero"], 55)
+			->setPhone($data["DDD"], $data["telefone"], 55)
 			->addAddress(
-				$data["rua"], 
-				'0', 
-				$data["bairro"], 
-				$data["cidade"], 
-				$data["estado"], 
-				$data["cep"], 
-				$data["pais"]
-			)
-			//->addAlternativePhone(11, 66448899, 55)
-			//->addAddress('Rua de teste', 123, 'Bairro', 'Sao Paulo', 'SP', '01234567', 'Apt. 23', 'BRA')
-			//->setCompanyName('Empresa Teste', 'Teste Empresa ME')
-			//->setCompanyOpeningDate('2011-01-01')
-			//->setCompanyPhone(11, 66558899, 55)
-			//->setCompanyTaxDocument('69086878000198')
-			//->setCompanyAddress('Rua de teste 2', 123, 'Bairro Teste', 'Sao Paulo', 'SP', '01234567', 'Apt. 23', 'BRA')
-			//->setCompanyMainActivity('82.91-1/00', 'Atividades de cobranças e informações cadastrais')
-			->create();			
+				$data['rua'], 
+				$data['numero'], 
+				$data['bairro'], 
+				$data['cidade'], 
+				$data['estado'], 
+				$data['cep'], 
+				$data['complemento'], 
+				'BRA'
+			);
+			if($business <> null){
+				$account->setCompanyName($business['nome_fantasia'], $business['razao_social'])
+				->setCompanyOpeningDate($business['data_abertura'])
+				->setCompanyPhone($business['DDD'], $business['telefone'], 55)
+				->setCompanyTaxDocument($business['cnpj'])
+				->setCompanyAddress(
+					$business['rua'], 
+					$business['numero'],
+					$business['bairro'], 
+					$business['cidade'], 
+					$business['estado'], 
+					$business['cep'], 
+					$business['complemento'], 
+					'BRA'
+				);					
+			}
+			$account->create();			
 			return $account;	
 		} catch (Exception $e) {
 			return $e->getMessage();
